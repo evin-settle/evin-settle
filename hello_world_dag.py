@@ -1,6 +1,6 @@
 #datetime
 from datetime import timedelta, datetime
-
+import csv
 # The DAG object
 from airflow import DAG
 from datetime import datetime
@@ -29,19 +29,14 @@ hello_world_dag = DAG('hello_world_dag',
 # python callable function
 def print_hello():
 
-    # define a timestamp format you like
-    current_datetime = datetime.now()
-    print("Current date & time : ", current_datetime)
-      
-    # convert datetime obj to string
-    str_current_datetime = str(current_datetime)
-      
-    # create a file object along with extension
-    file_name = str_current_datetime+".txt"
-    file = open(file_name, 'w')
-      
-    print("File created : ", file.name)
-    file.close()
+     row_list = [["SNo", "Name", "Subject"],
+                  [1, "Ash Ketchum", "English"],
+                  [2, "Gary Oak", "Mathematics"],
+                  [3, "Brock Lesner", "Physics"]]
+
+     with open('studentsq.csv', 'w', newline='') as file:
+         writer = csv.writer(file)
+         writer.writerows(row_list)
 
 # Creating first task
 start_task = DummyOperator(task_id='start_task', dag=hello_world_dag)
