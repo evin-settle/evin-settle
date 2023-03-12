@@ -21,7 +21,7 @@ default_args = {
 hello_world_dag = DAG('hello_world_dag',
 		default_args=default_args,
 		description='Hello World DAG',
-		schedule_interval='* * * * *', 
+		schedule_interval='*/20 * * * *', 
 		catchup=False,
 		tags=['example, helloworld']
 )
@@ -30,11 +30,18 @@ hello_world_dag = DAG('hello_world_dag',
 def print_hello():
 
     # define a timestamp format you like
-    FORMAT = '%Y%m%d%H%M%S'
-    path = 'foo.txt'
-    data = 'data to be written to the file\n'
-    new_path = '%s_%s' % (datetime.now().strftime(FORMAT), path)
-    open(new_path, 'w').write(data)
+    current_datetime = datetime.now()
+    print("Current date & time : ", current_datetime)
+      
+    # convert datetime obj to string
+    str_current_datetime = str(current_datetime)
+      
+    # create a file object along with extension
+    file_name = str_current_datetime+".txt"
+    file = open(file_name, 'w')
+      
+    print("File created : ", file.name)
+    file.close()
 
 # Creating first task
 start_task = DummyOperator(task_id='start_task', dag=hello_world_dag)
