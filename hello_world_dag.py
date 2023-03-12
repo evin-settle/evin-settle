@@ -3,6 +3,7 @@ from datetime import timedelta, datetime
 
 # The DAG object
 from airflow import DAG
+from datetime import datetime
 
 # Operators
 from airflow.operators.dummy_operator import DummyOperator
@@ -27,7 +28,13 @@ hello_world_dag = DAG('hello_world_dag',
 
 # python callable function
 def print_hello():
-		return 'Hello World!'
+
+    # define a timestamp format you like
+    FORMAT = '%Y%m%d%H%M%S'
+    path = 'foo.txt'
+    data = 'data to be written to the file\n'
+    new_path = '%s_%s' % (datetime.now().strftime(FORMAT), path)
+    open(new_path, 'w').write(data)
 
 # Creating first task
 start_task = DummyOperator(task_id='start_task', dag=hello_world_dag)
